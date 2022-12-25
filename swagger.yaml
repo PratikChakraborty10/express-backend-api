@@ -1,0 +1,55 @@
+openapi: '3.0.0'
+info:
+  title: T-Shirt Store API
+  description: A simple API for demonstrating T-Shirt store use cases
+  version: 1.1.0
+  contact:
+    name: Pratik Chakraborty
+    url: 'https://www.pratikchakraborty.in'
+    email: 'chakrabortypratik2000@gmail.com'
+
+servers:
+  - url: "{protocol}://localhost:4000/api/{version}"
+    description: For localhost
+    variables:
+    version:
+      enum:
+        - v1
+        - v2
+      default: v1
+    protocol:
+      enum:
+        - http
+        - https
+      default: http
+
+components:
+  securitySchemas:
+    cookieAuth: 
+      type: apiKey
+      in: cookie
+      name: token
+    BearerAuth:
+      type: http
+      schema: bearer
+
+paths:
+  /dummy:
+    get:
+      tags:
+        - Home
+      summary: Returns a great message from LCO
+      responses:
+        200:
+          description: All good success
+          content: 
+            application/json:
+              schema: 
+                type: string
+                example: "mystring"
+        400:
+          description: Bad request
+        500:
+          description: Internal
+
+          
