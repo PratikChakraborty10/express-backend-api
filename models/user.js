@@ -3,6 +3,8 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+require("dotenv").config()
+
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -32,11 +34,11 @@ const userSchema = new mongoose.Schema({
   photo: {
     id: {
       type: String,
-      required: true,
+    //   required: true,
     },
     secure_url: {
       type: String,
-      required: true,
+    //   required: true,
     },
   },
   forgotPasswordToken: String,
@@ -67,14 +69,16 @@ userSchema.methods.isValidatePassword = async function (usersendPassword) {
 // }
 
 // create and return jwt token
-userSchema.methods.getJwtToken = function () {
+userSchema.methods.getAuthToken = function() {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRY,
   });
 };
 
+
+
 // Generate password token (string)
-userSchema.methods.getForgotPasswordToken = function () {
+userSchema.methods.getForgotPasswordToken = function() {
   // Generate a long and random string
   const forgotToken = crypto.randomBytes(20).toString("hex");
 
@@ -85,7 +89,7 @@ userSchema.methods.getForgotPasswordToken = function () {
     .digest("hex");
 
   // set token expiry time
-  this.forgotPasswordExpiry = Date.now() + process.env.FORGOT_PASSWORD_EXPIRY;
+  this.forgotPasswordExpiry = Date.now() + 30 * 60 * 1000;
 
   return forgotToken;
 };
