@@ -9,7 +9,7 @@ exports.signup = bigPromise(async (req, res, next) => {
     return next(new Error("Name, email and password are required"));
   }
 
-  const user = User.create({
+  const user = await User.create({
     name,
     email,
     password,
